@@ -1,0 +1,720 @@
+{
+	"info": {
+		"_postman_id": "2866f4d6-af12-4d65-8da4-70004a39bef9",
+		"name": "DC_V3_Normalized_Offer_1L1I",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "35e67765-db0e-42e4-9ed5-ddc4810475ee",
+						"exec": [
+							"var bodyAut = JSON.parse(responseBody)",
+							"postman.setGlobalVariable(\"tokenRCCC\", bodyAut.oauth2.access_token);",
+							"postman.setGlobalVariable(\"jwtRCCC\", bodyAut.jwt);",
+							"",
+							"var cap = {};",
+							"cap.originDataSource = pm.iterationData.get(\"originDataSource\");",
+							"cap.customer = {};",
+							"cap.customer.customerCode = pm.iterationData.get(\"customerCode\");",
+							"cap.shipment = {};",
+							"cap.shipment.shippingCondition = {};",
+							"cap.shipment.shippingCondition.shippingConditionCode = pm.iterationData.get(\"shippingConditionCode\");",
+							"cap.shipment.optimalSource = {};",
+							"cap.shipment.optimalSource.optimalSourceCode = pm.iterationData.get(\"plantCode\");",
+							"cap.shipment.optimalSource.address = {};",
+							"cap.shipment.optimalSource.address.countryCode = \"MX\";",
+							"cap.shipment.shipmentLocation = {};",
+							"cap.shipment.shipmentLocation.shipmentLocationCode = pm.iterationData.get(\"customerCode\");",
+							"cap.shipment.shipmentTime = 0;",
+							"cap.shipment.shipmentDistance = 0;",
+							"cap.paymentTerm = {};",
+							"cap.paymentTerm.paymentTermCode = \"CASH\";",
+							"cap.createdDateTime = pm.iterationData.get(\"createdDateTime\");",
+							"cap.status = {};",
+							"cap.status.statusCode = pm.iterationData.get(\"statusCode\");",
+							"cap.loads = [];",
+							"var load = {};",
+							"load.requestedDateTimeFrom = pm.iterationData.get(\"requestedDateTimeFrom\");",
+							"load.loadNumber = 1;",
+							"load.plant = {};",
+							"load.plant.plantCode = pm.iterationData.get(\"plantCode\");",
+							"load.isCapable = false;",
+							"load.status = {};",
+							"load.status.statusCode = pm.iterationData.get(\"statusCode\");",
+							"load.fleetCapacityCheck = false;",
+							"load.items = [];",
+							"var item = {};",
+							"item.deleteItem = false;",
+							"item.loadItemId = 10;",
+							"item.loadItemCode = \"000010\";",
+							"item.itemSeqNum = 10;",
+							"item.quantity = pm.iterationData.get(\"tons\");",
+							"item.deliveryGroup = 901;",
+							"item.unitOfMeasure = {};",
+							"item.unitOfMeasure.unitId = 1;",
+							"item.unitOfMeasure.unitCode = \"TO\";",
+							"item.product = {};",
+							"item.product.productCode = pm.iterationData.get(\"productCode\");",
+							"item.product.productHierarchy = pm.iterationData.get(\"productHierarchy\");",
+							"item.product.isFinished = false;",
+							"item.product.productType = {};",
+							"item.product.productType.productTypeCode = pm.iterationData.get(\"productTypeCode\");",
+							"load.items.push(item);",
+							"cap.loads.push(load);",
+							"postman.setGlobalVariable(\"capabilitiesBody\", JSON.stringify(cap));",
+							"",
+							"tests['Login OK'] = responseCode.code == 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "security",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "rccc@mailinator.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Cemex2018@",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v2/secm/oam/oauth2/token",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v2",
+						"secm",
+						"oam",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Capacity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "99461627-f303-4787-ae5d-ed8a1cba9173",
+						"exec": [
+							"tests['Ok'] = (responseCode.code == 200);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept-Language",
+						"value": "es_MX"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/plants/{{plantId}}/capacities/{{loadDate}}?productTypeId={{productTypeId}}\n\n\n\n\n",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"plants",
+						"{{plantId}}",
+						"capacities",
+						"{{loadDate}}"
+					],
+					"query": [
+						{
+							"key": "productTypeId",
+							"value": "{{productTypeId}}\n\n\n\n\n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update capacity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7206bcac-60fd-433d-94b9-b36cd67d35a6",
+						"exec": [
+							"tests['Ok'] = responseCode.code == 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "App-Code",
+						"value": "{{appCodeDcmWebApp}}"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "es_MX"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"buckets\": [\r\n        \r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T05:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T06:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T07:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T08:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T09:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T10:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T11:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T12:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T13:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T14:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T15:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T16:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T17:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T18:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T19:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        },\r\n        {\r\n            \"bucketId\": 0,\r\n            \"productTypeId\": {{productTypeId}},\r\n            \"commercialManagementCode\": null,\r\n            \"bucketDateTime\": \"{{loadDate}}T20:00:00\",\r\n            \"totalQuantityOffer\": 100,\r\n            \"totalLoadOffer\": 100\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/plants/{{plantId}}/capacities/{{loadDate}}",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"plants",
+						"{{plantId}}",
+						"capacities",
+						"{{loadDate}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prepare Distribution",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "99461627-f303-4787-ae5d-ed8a1cba9173",
+						"exec": [
+							"var bodyRes = JSON.parse(responseBody);",
+							"var jsonarray = [];",
+							"",
+							"for(var count in bodyRes.buckets) {",
+							"    ",
+							"   item = {}",
+							"   item[\"bucketId\"] =  bodyRes.buckets[count].bucketId",
+							"   item[\"bucketDetailId\"] =  0",
+							"   item[\"shippingConditionId\"] = parseInt(pm.iterationData.get(\"shippingConditionId\"))",
+							"   item[\"quantityOffer\"] =  100",
+							"   item[\"loadOffer\"] =  100",
+							"   ",
+							"   jsonarray.push(item);",
+							"}",
+							"",
+							"var response = {};",
+							"response[\"distributedBuckets\"] = jsonarray;",
+							"console.log(response);",
+							"",
+							"postman.setGlobalVariable(\"distributedCapacityJson\", JSON.stringify(response));",
+							"tests['Ok'] = responseCode.code == 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Language",
+						"value": "es_MX"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/plants/{{plantId}}/capacities?capacityItemDate={{loadDate}}&productTypeId={{productTypeCode}}",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"plants",
+						"{{plantId}}",
+						"capacities"
+					],
+					"query": [
+						{
+							"key": "capacityItemDate",
+							"value": "{{loadDate}}"
+						},
+						{
+							"key": "productTypeId",
+							"value": "{{productTypeCode}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update distributed capacity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4f5716f9-b1e2-43db-b1b4-7520a5313723",
+						"exec": [
+							"tests['Ok'] = responseCode.code == 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "App-Code",
+						"value": "{{appCodeDcmWebApp}}"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "es_MX"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{distributedCapacityJson}}"
+				},
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/plants/{{plantId}}/distributedcapacities/{{loadDate}}",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"plants",
+						"{{plantId}}",
+						"distributedcapacities",
+						"{{loadDate}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DC",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "774f1320-a89d-4912-9350-b820a9a55d21",
+						"exec": [
+							"var body = JSON.parse(responseBody)",
+							"postman.setGlobalVariable(\"bucketId\", body.loads[0].offer.buckets[0].bucketId);",
+							"var request = JSON.parse(postman.getGlobalVariable(\"capabilitiesBody\"));",
+							"request.loads[0].currentOffer = {};",
+							"request.loads[0].currentOffer.locks = [];",
+							"request.loads[0].currentOffer.locks.push({lockId: body.loads[0].offer.buckets[0].bucketId});",
+							"request.status.statusCode = \"CNCL\";",
+							"postman.setGlobalVariable(\"cancellationBody\", JSON.stringify(request));",
+							"tests['Ok'] = responseCode.code == 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "app-code",
+						"value": "{{appCodeDcmWebApp}}",
+						"disabled": true
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en_US"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Ocp-Apim-Trace",
+						"value": "true"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{APIM_SUB_KEY}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{capabilitiesBody}}"
+				},
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/digitalconfirmation",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"digitalconfirmation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirmation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "79f78290-2243-4246-974d-ff890f4d0561",
+						"exec": [
+							"tests['Ok'] = responseCode.code == 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "App-Code",
+						"value": "{{appCodeDcmWebApp}}",
+						"disabled": true
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en_US"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"guid\": \"77a15c8d-4951-4f3f-ba9d-e279fa69a51b\",\n    \"loads\": [\n        {\n            \"loadNumber\": \"901\",\n            \"offers\": [\n                {\n                    \"id\": 1,\n                    \"buckets\": [\n                        {\n                            \"bucketId\": {{bucketId}}\n                            \n                        }\n                    ],\n                    \"status\": \"A\"\n                }\n            ]\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/digitalconfirmation/confirm",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"digitalconfirmation",
+						"confirm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check capacity committed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "99461627-f303-4787-ae5d-ed8a1cba9173",
+						"exec": [
+							"var body = JSON.parse(responseBody)",
+							"",
+							"var tonsCommitted = 0;",
+							"var tonsData = pm.iterationData.get(\"tons\");",
+							"",
+							"for (let b of body.buckets) {",
+							"    tonsCommitted += b.totalQuantityCommitted;",
+							"}",
+							"",
+							"console.log({tonsData, tonsCommitted});",
+							"",
+							"tests['Ok'] = responseCode.code == 200;",
+							"tests['Total quantity'] = (tonsCommitted == tonsData);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Language",
+						"value": "es_MX"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/plants/{{plantId}}/capacities?capacityItemDate={{loadDate}}&productTypeId={{productTypeCode}}",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"plants",
+						"{{plantId}}",
+						"capacities"
+					],
+					"query": [
+						{
+							"key": "capacityItemDate",
+							"value": "{{loadDate}}"
+						},
+						{
+							"key": "productTypeId",
+							"value": "{{productTypeCode}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancellation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "774f1320-a89d-4912-9350-b820a9a55d21",
+						"exec": [
+							"tests['Ok'] = responseCode.code == 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "app-code",
+						"value": "{{appCodeDcmWebApp}}",
+						"disabled": true
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en_US"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Ocp-Apim-Trace",
+						"value": "true"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{APIM_SUB_KEY}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{{cancellationBody}}"
+				},
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/digitalconfirmation",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"digitalconfirmation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check capacity released",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "99461627-f303-4787-ae5d-ed8a1cba9173",
+						"exec": [
+							"var body = JSON.parse(responseBody)",
+							"var tonsCommitted = 0;",
+							"",
+							"for (let b of body.buckets) {",
+							"    tonsCommitted += b.totalQuantityCommitted;",
+							"}",
+							"",
+							"tests['Ok'] = responseCode.code == 200;",
+							"tests['Total quantity'] = (tonsCommitted === 0);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Language",
+						"value": "es_MX"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{tokenRCCC}}"
+					},
+					{
+						"key": "jwt",
+						"value": "{{jwtRCCC}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{AzureAPIManagementEndPoint}}/v3/oe/plants/{{plantId}}/capacities?capacityItemDate={{loadDate}}&productTypeId={{productTypeCode}}",
+					"host": [
+						"{{AzureAPIManagementEndPoint}}"
+					],
+					"path": [
+						"v3",
+						"oe",
+						"plants",
+						"{{plantId}}",
+						"capacities"
+					],
+					"query": [
+						{
+							"key": "capacityItemDate",
+							"value": "{{loadDate}}"
+						},
+						{
+							"key": "productTypeId",
+							"value": "{{productTypeCode}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

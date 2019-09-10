@@ -1,0 +1,36 @@
+[
+  {
+    "loadDate": "2019-10-17",
+    "plantId": 2798,
+    "plantCode": "EA24",
+    "productTypeId": 3,
+    "productTypeCode": "0003",
+    "shippingConditionId": 12,
+    "shippingConditionCode": "01",
+    "productHierarchyCode": "006074172052",
+    "productCode": "40000091",
+    "customerCode": "65307122",
+    "statusCode": "PEND",
+    "createdDateTime": "2019-09-03T17:38:00",
+    "requestedDateTimeFrom": "2019-10-17T10:00:00",
+    "tons": 30,
+    "originDataSource": "SAP"
+  },
+    {
+    "loadDate": "2019-10-17",
+    "plantId": 2798,
+    "plantCode": "EA24",
+    "productTypeId": 2,
+    "productTypeCode": "0002",
+    "shippingConditionId": 12,
+    "shippingConditionCode": "01",
+    "productHierarchyCode": "001001002002013",
+    "productCode": "10002066",
+    "customerCode": "65307122",
+    "statusCode": "PEND",
+    "createdDateTime": "2019-09-03T17:38:00",
+    "requestedDateTimeFrom": "2019-10-17T10:00:00",
+    "tons": 20,
+    "originDataSource": "SAP"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "name": "apitestgit",
+  "version": "1.0.0",
+  "description": "apigithub",
+  "scripts": {
+    "test":"newman run tests/DC_V3_Normalized_Offer_1L1I.postman_collection.json"
+  },
+  "author": "Efrain T",
+  "dependencies": {
+    "newman": "^4.5.4"
+  }
+}

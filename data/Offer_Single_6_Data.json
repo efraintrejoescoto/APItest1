@@ -1,0 +1,19 @@
+[
+  {
+    "loadDate": "2019-10-17",
+    "plantId": 2794,
+    "plantCode": "EA20",
+    "productTypeId": 3,
+    "productTypeCode": "0003",
+    "shippingConditionId": 12,
+    "shippingConditionCode": "01",
+    "productHierarchyCode": "006074172052",
+    "productCode": "40000091",
+    "customerCode": "65307122",
+    "statusCode": "PEND",
+    "createdDateTime": "2019-09-03T17:38:00",
+    "requestedDateTimeFrom": "2019-10-17T18:00:00",
+    "tons": 30,
+    "originDataSource": "SAP"
+  }
+]
